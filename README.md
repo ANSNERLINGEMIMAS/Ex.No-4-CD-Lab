@@ -36,24 +36,42 @@ int yywrap() {
 ## expr4.y
 ```
 %{
-#include "expr4.tab.h"
+#include <stdio.h>
+#include <stdlib.h>
+
+int yylex(void);
+void yyerror(const char *s);
 %}
 
-%%
-
-[a-zA-Z][a-zA-Z0-9]*    { return VARIABLE; }
-.|\n                    { return INVALID; }
+%token VARIABLE INVALID
 
 %%
-int yywrap() {
-    return 1;
+
+input:
+    VARIABLE { printf("Valid variable name\n"); }
+  | INVALID  { printf("Invalid variable name\n"); }
+  ;
+
+%%
+
+int main() {
+    printf("Enter a variable name: ");
+    yyparse();
+    return 0;
 }
+
+void yyerror(const char *s) {
+    // we handle invalid input in the grammar, so this can stay empty
+}
+
+
 
 ```
 
 ## Output
 
-![WhatsApp Image 2025-09-26 at 10 59 03_6fdd6bcf](https://github.com/user-attachments/assets/7ee63531-25ec-4795-9c01-b2c3d786944e)
+![WhatsApp Image 2025-09-26 at 11 06 34_9a92c0ad](https://github.com/user-attachments/assets/b48b1d9c-7859-4859-b999-37fd7ebff5c3)
+
 
 ## Result
 A YACC program to recognize a valid variable which starts with a letter followed by any number of letters or digits is executed successfully and the output is verified.
